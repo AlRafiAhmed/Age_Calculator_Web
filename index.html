@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical Age Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-800 to-blue-500">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <h1 class="text-4xl md:text-5xl font-bold text-center text-white mb-8">
+            ✨ Rafi's Magical Age Calculator ✨
+        </h1>
+        
+        <div class="bg-slate-800/50 rounded-xl p-6 md:p-8 shadow-2xl">
+            <div class="mb-6">
+                <label class="block text-white mb-2">Your Name</label>
+                <input type="text" id="name" placeholder="Enter your name" class="w-full p-4 rounded-lg bg-slate-700 text-white border-2 border-slate-600 focus:border-red-500 focus:outline-none text-lg">
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mb-8">
+                <div>
+                    <label class="block text-white mb-2">Day</label>
+                    <select id="day" class="w-full p-4 rounded-lg bg-slate-700 text-white border-2 border-slate-600 focus:border-red-500 focus:outline-none text-lg">
+                        <script>
+                            for(let i = 1; i <= 31; i++) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-white mb-2">Month</label>
+                    <select id="month" class="w-full p-4 rounded-lg bg-slate-700 text-white border-2 border-slate-600 focus:border-red-500 focus:outline-none text-lg">
+                        <option value="0">January</option>
+                        <option value="1">February</option>
+                        <option value="2">March</option>
+                        <option value="3">April</option>
+                        <option value="4">May</option>
+                        <option value="5">June</option>
+                        <option value="6">July</option>
+                        <option value="7">August</option>
+                        <option value="8">September</option>
+                        <option value="9">October</option>
+                        <option value="10">November</option>
+                        <option value="11">December</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-white mb-2">Year</label>
+                    <select id="year" class="w-full p-4 rounded-lg bg-slate-700 text-white border-2 border-slate-600 focus:border-red-500 focus:outline-none text-lg">
+                        <script>
+                            const currentYear = new Date().getFullYear();
+                            for(let i = currentYear; i >= 1900; i--) {
+                                document.write(`<option value="${i}">${i}</option>`);
+                            }
+                        </script>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="calculateAge()" 
+                    class="w-full py-4 px-6 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg transition-colors duration-300 text-lg mb-8">
+                Calculate My Age 🎈
+            </button>
+
+            <div id="result" 
+                 class="hidden p-6 bg-slate-700/50 rounded-lg text-center text-lg md:text-xl text-white">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateAge() {
+            const name = document.getElementById('name').value || 'Friend';
+            const day = parseInt(document.getElementById('day').value);
+            const month = parseInt(document.getElementById('month').value);
+            const year = parseInt(document.getElementById('year').value);
+            
+            const birthDate = new Date(year, month, day);
+            const today = new Date();
+            
+            let years = today.getFullYear() - birthDate.getFullYear();
+            let months = today.getMonth() - birthDate.getMonth();
+            let days = today.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 0);
+                days += lastMonth.getDate();
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            const result = document.getElementById('result');
+            result.innerHTML = `
+                Hey ${name}! 🎉 You are 
+                <span class="font-bold text-red-500">${years} years</span>,
+                <span class="font-bold text-yellow-400">${months} months</span>, and
+                <span class="font-bold text-green-400">${days} days</span> 
+                old! 🎉
+                <div class="mt-4 text-sm text-gray-300">
+                    Born on: ${new Date(birthDate).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })}
+                </div>
+            `;
+            
+            result.classList.remove('hidden');
+            result.classList.add('animate-bounce');
+            setTimeout(() => result.classList.remove('animate-bounce'), 1000);
+        }
+    </script>
+</body>
+</html>
